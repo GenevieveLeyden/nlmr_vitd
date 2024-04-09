@@ -1,3 +1,9 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
 Summary #1 
 ================
 ## Non-linear MR evaluating Vitamin D and CRP 
@@ -14,27 +20,27 @@ Summary #1
 #### GRS 
 
 ###### Vitamin D 
-['Zhou et al']('https://academic.oup.com/ije/article/52/1/260/6586699?login=true'): The vitamin D instruments are based on a GWAS of Vitamin D in UKB, but taking the estimates from an earlier GWAS in the SUNLIGHT consortium. They constructed a weighted GRS using 35 SNPs. They mention the focused score based on 4 relevant loci but I don't know what they do with it exactly. 
+['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): The vitamin D instruments are based on a GWAS of Vitamin D in UKB, but taking the estimates from an earlier GWAS in the SUNLIGHT consortium. They constructed a weighted GRS using 35 SNPs. They mention the focused score based on 4 relevant loci but I don't know what they do with it exactly. 
 
-['Hamilton et al']('https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf'): Used instruments as derived and described in this ['Burgess et al']('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7615586/') study in the Lancet Endocrinology (UKB + other studies). In this analysis, a focused score based on 21 variants mapping to 4 genetic loci relevant to VitD metabolism was considered; but only 18 were available in UKB, the missing 3 were rare variants (MAF<0.005). Weighted GRS were calculated using PLINK v2. 
+['Hamilton et al'](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf): Used instruments as derived and described in this ['Burgess et al']('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7615586/') study in the Lancet Endocrinology (UKB + other studies). In this analysis, a focused score based on 21 variants mapping to 4 genetic loci relevant to VitD metabolism was considered; but only 18 were available in UKB, the missing 3 were rare variants (MAF<0.005). Weighted GRS were calculated using PLINK v2. 
 
 ###### CRP 
-['Zhou et al']('https://academic.oup.com/ije/article/52/1/260/6586699?login=true'): This score was constructed using 46 SNPs associated with CRP/weights from a ['non-UKB meta-analysis']('https://www.sciencedirect.com/science/article/pii/S0002929718303203?via%3Dihub'). They also log-transformed the CRP measurements in UKB. 
+['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): This score was constructed using 46 SNPs associated with CRP/weights from a ['non-UKB meta-analysis'](https://www.sciencedirect.com/science/article/pii/S0002929718303203?via%3Dihub). They also log-transformed the CRP measurements in UKB. 
 
 For vitamin D I think I should construct both GRS mentioned above. 
 
 ##### To do: 
 
 - derive GRS for all 3 scores 
-- derive individual PRS for each exposure, could ues `PLINK v2` to calculate a weighted score using the GWAS effect estimates; or  `begenix` like ['here']('https://2cjenn.github.io/PRS_Pipeline/'). 
+- derive individual PRS for each exposure, could ues `PLINK v2` to calculate a weighted score using the GWAS effect estimates; or  `begenix` like ['here'](https://2cjenn.github.io/PRS_Pipeline/). 
 
 
 #### NLMR 
 
-['Zhou et al']('https://academic.oup.com/ije/article/52/1/260/6586699?login=true'): used 100 strata
+['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): used 100 strata
 
 
-['Hamilton et al']('https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf):
+['Hamilton et al'](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf):
 
 #### Residual method summary 
 
@@ -71,19 +77,41 @@ This approach resolves some of the issues attributed to the residual method but 
 
 Different covariates used in each study: 
 
-['Zhou et al']('https://academic.oup.com/ije/article/52/1/260/6586699?login=true'): Many covariates: all models were adjusted for age, sex, assessment centre, birth location, SNP array, top 40 genetic principal components and nuisance factors related to the measurement of Vitamin D and/or CRP concentrations, including month in which blood sample was taken, fasting time before blood sample was taken and sample aliquots  for measurement. Adjustment for birth location and the 40 genetic components was recommended to account for the latent population structure in UKB. 
+['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): Many covariates: all models were adjusted for age, sex, assessment centre, birth location, SNP array, top 40 genetic principal components and nuisance factors related to the measurement of Vitamin D and/or CRP concentrations, including month in which blood sample was taken, fasting time before blood sample was taken and sample aliquots  for measurement. Adjustment for birth location and the 40 genetic components was recommended to account for the latent population structure in UKB. 
 
 
-['Hamilton et al']('https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf'): Age, sex, UKB recruitment centre, smoking status (coded as current or never/ex) and the first 5 principal components from UKB directly. Smoking status was a more relevant covariate for analysis of BMI. 
+['Hamilton et al'](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf): Age, sex, UKB recruitment centre, smoking status (coded as current or never/ex) and the first 5 principal components from UKB directly. Smoking status was a more relevant covariate for analysis of BMI. 
 
 #### Details 
 
-['Zhou et al']('https://academic.oup.com/ije/article/52/1/260/6586699?login=true'): 
+['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): 
 Used the fractional-polynomial method for NLMR of teh exposure-outcome association. UKB was stratified into 100 strata using the residuals of the exposure after regressing on the corresponding GRS. Within each stratum the localized average causal effect (LACE) was calculated using the ratio-of-coefficients method. 
 
-['Hamilton et al']('https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf'):
+['Hamilton et al'](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf):
 Performed conventional Mr then used the `SUMnlmr` package in R to perform both the residual and doubly-ranked method on the individual level data. 
 
 Conventional MR as performed using a 2-stage residual inclusion appreach in the `OneSampleMR` R package, using both the whole cohort then in strata of age and sex (these were outcomes). 
 
 NLMR was performed using the standard settings in the `SUMnlmr` package, with a Gaussian distribution for linear outcomes, and a binomial distribution for binary outcomes. Used 10 strata for most analyses, but performed sensitivity analyses using different numbers of strata. 
+
+
+
+##
+
+## Analysis notes 
+
+### Organise directories 
+
+Will want to mirror the file structures between bc4 and project space on the rdsf so scripts and the data extracted/generated can be backed up appropriately. 
+
+### Generate PGS 
+
+##### Steps 
+1. Get instrument estimates from publications.
+2. Harmonise instruments/check coding against UKB sumstats.
+3. Extract SNPs from genetic data (`begenix`).
+4. Convert to dosage (`plink2`).
+5. Prepare cohort (individual IDs, linekr file, apply exclusions). 
+6. Extract phenotype data. 
+6. Merge with scores. 
+
