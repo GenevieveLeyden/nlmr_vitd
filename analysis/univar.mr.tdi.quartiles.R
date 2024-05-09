@@ -65,23 +65,23 @@ filenames <- filenames[which(filenames %in% subset)]
 ### V2 - adjust for season instead
 covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## 
           "season","fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
-          "PC8", "PC9", "PC10")
+         "PC8", "PC9", "PC10")
 
 ############# UPDATE WHICH SCORE IS BEING USED! ################### 
 ##iv <- "vit.d.score" ## Update manually??! 
-##iv <- "vit.d.focused"
+iv <- "vit.d.focused"
 # iv <- "vit.d.focused.transformed"
-# exp <- "vitamin.d"
+ exp <- "vitamin.d"
 # 
-# outcome <- "crp.log"
+ outcome <- "crp.log"
 # 
 
 
 ###### Update for the opposite direction
-iv <- "crp.score"
-exp <- "crp.log"
+#iv <- "crp.score"
+#exp <- "crp.log"
 
-outcome <- "vitamin.d"
+#outcome <- "vitamin.d"
 
 
 ############### MODEL ###############
@@ -128,8 +128,29 @@ combined_results$exp <- gsub("pheno\\.|\\.txt", "", combined_results$exp)
 
 combined_results
 
+
+
+
+
+##### Save output 
 ##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.zhou.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
   
 ##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
 ##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.transformed.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.crp.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+
+### need to repeat the last anlaysis using crp as didn't save the df 
+
+#### V2 results 
+
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.V2.crp.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.V2.vitd.zhou.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.V2.vitd.focused.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+
+
