@@ -42,29 +42,46 @@ extract_estimate <- function(summary) {
 ## Data 
 
 path <- getwd()
-##filenames <- list.files(path = path) ## the overall analysis is distinct analysis 
-f1 <- list.files(path = path, pattern = ".summer.txt")
-f2 <- list.files(path = path, pattern = ".winter.txt")
-filenames <- c(f1,f2)
+##filenames <- list.files(path = path) ## 
+### V1 files 
+#f1 <- list.files(path = path, pattern = ".summer.txt")
+#f2 <- list.files(path = path, pattern = ".winter.txt")
+#filenames <- c(f1,f2)
 
 
 
+#### V2 files 
+filenames <- list.files(path = path) 
+subset <- c("pheno.q1.txt", "pheno.q2.txt", "pheno.q3.txt","pheno.q4.txt")
+filenames <- filenames[which(filenames %in% subset)]
 
-##input <- 
-##q1 <- fread('pheno.q1.txt', header = T)
+
+### V1 
+#covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## makes no difference after checking
+ #         "fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
+  #        "PC8", "PC9", "PC10")
 
 
-covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## makes no difference after checking
-          "fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
+### V2 - adjust for season instead
+covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## 
+          "season","fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
           "PC8", "PC9", "PC10")
-
 
 ############# UPDATE WHICH SCORE IS BEING USED! ################### 
 ##iv <- "vit.d.score" ## Update manually??! 
-iv <- "vit.d.focused"
-exp <- "vitamin.d"
+##iv <- "vit.d.focused"
+# iv <- "vit.d.focused.transformed"
+# exp <- "vitamin.d"
+# 
+# outcome <- "crp.log"
+# 
 
-outcome <- "crp.log"
+
+###### Update for the opposite direction
+iv <- "crp.score"
+exp <- "crp.log"
+
+outcome <- "vitamin.d"
 
 
 ############### MODEL ###############
@@ -90,6 +107,8 @@ for (filename in filenames) {
   # Read in the input file
   q1 <- fread(filename, header = TRUE)  # Assuming data is in tabular format
   
+  q1$season <- ifelse(q1$season == "summer", 1, 0) ### update variables to binary ## makes no difference 
+  
   # Run the analysis
   model <- ivreg(noquote(formula), data = q1)
   
@@ -111,5 +130,6 @@ combined_results
 
 ##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.zhou.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
   
-write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
+##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.transformed.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
