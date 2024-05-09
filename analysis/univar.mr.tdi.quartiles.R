@@ -41,26 +41,27 @@ extract_estimate <- function(summary) {
 ############### Vitamin D -> CRP 
 ## Data 
 
-### get all the input files 
 path <- getwd()
 ##filenames <- list.files(path = path) ## the overall analysis is distinct analysis 
 f1 <- list.files(path = path, pattern = ".summer.txt")
 f2 <- list.files(path = path, pattern = ".winter.txt")
 filenames <- c(f1,f2)
-##names <- gsub(".txt.gz","",filenames)
 
-##q1 <- fread('pheno.q1.txt', header = T)
+
+
 
 ##input <- 
-q1 <- fread('pheno.q1.txt', header = T)
+##q1 <- fread('pheno.q1.txt', header = T)
 
 
 covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## makes no difference after checking
           "fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
           "PC8", "PC9", "PC10")
 
-iv <- "vit.d.score" ## Update manually??! 
 
+############# UPDATE WHICH SCORE IS BEING USED! ################### 
+##iv <- "vit.d.score" ## Update manually??! 
+iv <- "vit.d.focused"
 exp <- "vitamin.d"
 
 outcome <- "crp.log"
@@ -106,7 +107,9 @@ combined_results$exp <- rownames(combined_results)
 row.names(combined_results) <- NULL
 combined_results$exp <- gsub("pheno\\.|\\.txt", "", combined_results$exp)
 
+combined_results
 
 ##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.zhou.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
   
+write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
