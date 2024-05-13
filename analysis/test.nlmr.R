@@ -21,7 +21,7 @@ dat.c <- fread('pheno.dat.filtered.covars.txt', header = T)
 
 dat1 <- subset(dat, !is.na(crp))
 dat1 <- subset(dat1, !is.na(vitamin.d)) ## keeping only complete values of phenotype  ## N = 306,186
-
+dat1 <- subset(dat1, !is.na(fasting.time)) ## adding for completeness
 
 ### Test the residual method first! 
 
@@ -72,12 +72,12 @@ dat.c1 <- dat.c[which(dat.c$IID %in% dat1$IID),]
 #                     PC1 + PC2 + PC3 + PC4 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data = dat.c1)
 #                   
 
-missing_IIDs <- df$IID[!(df$IID %in% df1$IID)] ## 8 missing complete info in fasting time?? 
+###missing_IIDs <- df$IID[!(df$IID %in% df1$IID)] ## 8 missing complete info in fasting time?? 
 
-dat.c1 <- dat.c1[!(dat.c1$IID %in% missing_IIDs), ]
+####dat.c1 <- dat.c1[!(dat.c1$IID %in% missing_IIDs), ]
 
 dummies <- model.matrix(~  sex + age.at.assessment + assessmenth.centre + month.of.assessment + fasting.time +
-                          PC1 + PC2 + PC3 + PC4 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data = dat.c1)[,-1]
+                          PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data = dat.c1)[,-1]
 
 NROW(dummies)
 
@@ -107,14 +107,18 @@ model.c1<- with(vitd.residual.c1$summary, frac_poly_summ_mr(bx=bx,
 
 summary(model.c1)
 
-model.c1$figure +
-  xlab("Vitamin D (nmol/L)") +
-  ylab("\u394 CRP (%)")
+
 
 model.c1$lace  
 model.c1$p_tests
 model.c1$p_heterogeneity
 
+plot1 <- model.c1$figure +
+  xlab("Vitamin D (nmol/L)") +
+  ylab("\u394 CRP (%)") + 
+  ggtitle("Non-linear MR - Residual method")
+
+plot1
 
 
 
@@ -152,4 +156,116 @@ model.c2$lace
 model.c2$p_tests
 model.c2$p_heterogeneity
 
+plot2 <- model.c2$figure +
+  xlab("Vitamin D (nmol/L)") +
+  ylab("\u394 CRP (%)") + 
+  ggtitle("Non-linear MR - Doubly-ranked method")
+
+plot2
+
+
+
+##### Save plots 
+
+ggsave('../../../../../results/nlmr_vitd/tests/plots/vitd.crp.nlmr.residual.png',
+  plot = plot1,
+  scale = 1,
+  width = 20,
+  height = 15,
+  units = c("cm"),
+  dpi = 300
+)
+
+
+
+ggsave('../../../../../results/nlmr_vitd/tests/plots/vitd.crp.nlmr.doubly.ranked.png',
+       plot = plot2,
+       scale = 1,
+       width = 20,
+       height = 15,
+       units = c("cm"),
+       dpi = 300
+)
+
+
+
+
+
+
+
+
+
+########## Checking the other instruments 
+##### Residual 
+
+
+vitd.residual.c1<-create_nlmr_summary(y = dat.c1$vitamin.d,
+                                      x = dat.c1$crp.log,
+                                      g = dat.c1$crp.score,
+                                      covar = dummies,
+                                      family = "gaussian",
+                                      strata_method = "residual", 
+                                      controlsonly = FALSE,
+                                      q = 10)
+
+
+head(vitd.residual.c1)$summary
+
+
+model.c1<- with(vitd.residual.c1$summary, frac_poly_summ_mr(bx=bx,
+                                                            by=by, 
+                                                            bxse=bxse, 
+                                                            byse=byse, 
+                                                            xmean=xmean,
+                                                            family="gaussian",
+                                                            fig=TRUE)
+)
+
+
+
+
+summary(model.c1)
+
+
+
+model.c1$lace  
+model.c1$p_tests
+model.c1$p_heterogeneity
+
+
+
+####### Doubly rankned 
+vitd.residual.c2<-create_nlmr_summary(y = dat.c1$vitamin.d,
+                                      x = dat.c1$crp.log,
+                                      g = dat.c1$crp.score,
+                                      covar = dummies,
+                                      family = "gaussian",
+                                      strata_method = "ranked", 
+                                      controlsonly = FALSE,
+                                      q = 10)
+
+head(vitd.residual.c2)$summary
+
+
+model.c2<- with(vitd.residual.c2$summary, frac_poly_summ_mr(bx=bx,
+                                                            by=by, 
+                                                            bxse=bxse, 
+                                                            byse=byse, 
+                                                            xmean=xmean,
+                                                            family="gaussian",
+                                                            fig=TRUE)
+)
+
+
+
+summary(model.c2)
+
+model.c2$figure +
+  xlab("Vitamin D (nmol/L)") +
+  ylab("\u394 CRP (%)")
+
+
+model.c2$lace  
+model.c2$p_tests
+model.c2$p_heterogeneity
 

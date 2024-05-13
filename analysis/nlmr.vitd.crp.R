@@ -141,15 +141,6 @@ effs5 <-model.residual.3$lace %>% as.data.frame() %>% mutate(method = "Residual"
 
 
 
-
-
-
-
-
-
-
-
-
 ####### 2. Doubly ranked method 
 
 ##### a. Vit D GWAS score -> CRP 
@@ -233,13 +224,6 @@ vitd.focused <- rbind(effs3,effs4)
 
 
 
-
-
-
-
-
-
-
 ##### c. CRP -> Vitamin D 
 ### i. create the summary data - same covariates as before 
 vitd.ranked.3<-create_nlmr_summary(y = dat1$vitamin.d,
@@ -277,3 +261,29 @@ effs6 <-model.ranked.3$lace %>% as.data.frame() %>% mutate(method = "Ranked") %>
 
 
 crp <- rbind(effs5,effs6)
+
+
+
+
+
+##################### Save all results #############################
+
+### model outputs 
+saveRDS(summary(model.residual.1), file="../../../../../results/nlmr_vitd/nlmr.res/vitd.gwas.residual.RDS")
+saveRDS(summary(model.residual.2), file="../../../../../results/nlmr_vitd/nlmr.res/vitd.focused.residual.RDS")
+saveRDS(summary(model.residual.3), file="../../../../../results/nlmr_vitd/nlmr.res/crp.residual.RDS")
+
+saveRDS(summary(model.ranked.1), file="../../../../../results/nlmr_vitd/nlmr.res/vitd.gwas.ranked.RDS")
+saveRDS(summary(model.ranked.2), file="../../../../../results/nlmr_vitd/nlmr.res/vitd.focused.ranked.RDS")
+saveRDS(summary(model.ranked.3), file="../../../../../results/nlmr_vitd/nlmr.res/crp.ranked.RDS")
+
+
+
+#### LACE effect estimates 
+
+write.table(vitd.gwas, "../../../../../results/nlmr_vitd/nlmr.res/vitd.gwas.lace.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+write.table(vitd.focused, "../../../../../results/nlmr_vitd/nlmr.res/vitd.focused.lace.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+write.table(crp, "../../../../../results/nlmr_vitd/nlmr.res/crp.lace.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+
+###test <- readRDS("../../../../../results/nlmr_vitd/nlmr.res/vitd.gwas.ranked.RDS")
