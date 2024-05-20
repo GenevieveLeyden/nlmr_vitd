@@ -80,18 +80,27 @@ This approach resolves some of the issues attributed to the residual method but 
 
 Different covariates used in each study: 
 
-['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): Many covariates: all models were adjusted for age, sex, assessment centre, birth location, SNP array, top 40 genetic principal components and nuisance factors related to the measurement of Vitamin D and/or CRP concentrations, including month in which blood sample was taken, fasting time before blood sample was taken and sample aliquots  for measurement. Adjustment for birth location and the 40 genetic components was recommended to account for the latent population structure in UKB. 
+[Zhou et al](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): Many covariates: all models were adjusted for age, sex, assessment centre, birth location, SNP array, top 40 genetic principal components and nuisance factors related to the measurement of Vitamin D and/or CRP concentrations, including month in which blood sample was taken, fasting time before blood sample was taken and sample aliquots  for measurement. Adjustment for birth location and the 40 genetic components was recommended to account for the latent population structure in UKB. 
 
 The month of sample collection is useful because then we can take account for the effect Spring/Summer/, Autumn/Winter effects on Vitamin D exposure. 
 
-['Hamilton et al'](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf): Age, sex, UKB recruitment centre, smoking status (coded as current or never/ex) and the first 5 principal components from UKB directly. Smoking status was a more relevant covariate for analysis of BMI. 
+##### Sample
+They restricted their analysis to White British based on self-reported and genetics, and had a total sample size of N = 294,970 
+
+I can restrict to White British or White European based on the genetic PCs and I don't think it will restrict it quite as much.. 
+
+[Hamilton et al](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf): Age, sex, UKB recruitment centre, smoking status (coded as current or never/ex) and the first 5 principal components from UKB directly. Smoking status was a more relevant covariate for analysis of BMI. 
+
+##### Sample
+Used the in-house European derived subset 
+Also excluded people with sex-chromosome mismatch, QC as outlined on the in-house documentation. 
 
 #### Details 
 
-['Zhou et al'](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): 
+[Zhou et al](https://academic.oup.com/ije/article/52/1/260/6586699?login=true): 
 Used the fractional-polynomial method for NLMR of teh exposure-outcome association. UKB was stratified into 100 strata using the residuals of the exposure after regressing on the corresponding GRS. Within each stratum the localized average causal effect (LACE) was calculated using the ratio-of-coefficients method. 
 
-['Hamilton et al'](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf):
+[Hamilton et al](https://www.medrxiv.org/content/10.1101/2023.08.21.23293658v3.full.pdf):
 Performed conventional Mr then used the `SUMnlmr` package in R to perform both the residual and doubly-ranked method on the individual level data. 
 
 Conventional MR as performed using a 2-stage residual inclusion appreach in the `OneSampleMR` R package, using both the whole cohort then in strata of age and sex (these were outcomes). 
@@ -229,3 +238,139 @@ Could be nice to check if I could run all 3 of the above steps from a single `sl
 - merge with phenotype data 
 
 Some standard exclusions have already been applied to the sample dataset that I am using. These are described in detail in sections 2.1 and 2.2 [here](https://data.bris.ac.uk/datasets/1ovaau5sxunp2cv8rcy88688v/UK%20Biobank%20Genetic%20Data_MRC%20IEU%20Quality%20Control%20version%202.pdf), and referred to as the filtered bgen files. My current sample size is 463005. Check whether additional exclusions are necessary later. 
+
+Now I have all the scripts to generate the scores - I want to see if I can integrate them into a pipeline, so they all run from a single slurm submission - will test this out for the first vitamin D score. 
+
+Now that I have scripts for the scores - and possibly a pipeline, the next thing is to get the phenotype datasets ready. 
+
+The outcomes are measured VitaminD and CRP - and also looking at the latest update GDS sent about Townsend depravity index. 
+With Townsend Deprivation index I'd need to divide individuals into each of the quartiles. 
+Split data into time of year (of Vitamine D measurement)
+Then test using simple linear MR the relationship between genetically higher Vitamin D on CRP in for e.g. Winter in each of the quartiles. 
+So we have a group with a real Vitamin D deficiency - and is there a real effect of Vitamin D on CRP in them. 
+
+To do: 
+
+- back up the prs pipeline and data generated to the rdsf/github 
+- make a plan for the phenotype data needed 
+- need phenotype and covariate data for the initial nlmr fot vitD and CRP 
+- need phenotype data to follow up the analysis with the townsend deprivation index data/time of year 
+
+A note on the Townsend score: 
+
+Positive values of the index will indicate areas with high material deprivation, whereas those with negative values will indicate relative affluence 
+
+
+
+Need to get some data from other sources - get Townsend Index data from DNAnexus. 
+
+TOMORROW - figure out how to extract data and download it from DNAnexus! (for this and the lifecourse stuff)
+
+#### DNAnexus phenotype data 
+
+Export selected phenotypic fields from the UKB study into a TSV (or CSV) using the Table Exporter app as described [here](https://dnanexus.gitbook.io/uk-biobank-rap/working-on-the-research-analysis-platform/accessing-phenotypic-data-as-a-file).
+
+- Open the dataset
+- Select Data Preview
+- Click +Add Columns 
+- Keep building the phenotype dataset like this until ready 
+- Select Dashboard Actions > Save Dashboard View and name the file 
+- Navigate to the project folder and select Start Analysis 
+- Select the Table Exporter app > Run Selected 
+- Name the job 
+- Within the Inputs tab: Select record > select the dataset you've just created.
+- The table exporter app doesn't extract participant ID. It must be specified in the advanced options using: Entity = participant, and Field Names = eid in advanced options 
+- Then select Options: specify filename (Output prefix) and File format (TSV). Coding Option > RAW, Header Style > UKB-FORMAT  
+- Start Analysis 
+
+Phenotype data has now been extracted - going to download it and merge with the linker file/withdrawals. There was an issue extracting the phenotype data - either could only extract the IDs or only the phenotype file - still need to work on this. Get this data today and then work on the code Gus sent. 
+
+
+- `dx ls -la` gets the file ids - very useful 
+- `dx describe` on a file gives you very useful file information on the platform. 
+- you can only mv, not cp a file, due to the unique file ids generated on creation 
+- every file has a property called eid and field (id in ukb the file corresponds to). You can use `dx find data` to find data using these properties. 
+- use `dx download <file-id>` to download data 
+
+Now I have been able to extract the phenotype data - need to download it, merge with linker files and remove withdrawals. Getting the field names/key for the ids using this: 
+
+`dx extract_dataset app81499_20240207020122.dataset --list-fields > ukb_pheno.fields.txt` - but getting the appropriate dataset id 
+
+
+
+
+### Exploring the data 
+
+Focusing on the crp and Zhou vitamin D score for now. 
+
+First sanity check, verify that the GRS is strongly associated with the trait and we're getting a similar result as reported in the paper. Using these commands: 
+
+``` 
+model <- lm(vitamin.d ~ vit.d.score, data = dat)
+summary(model)
+```
+
+- The Zhou Vitamin D score is strongly associated with measured vitamin D (P<2e16).
+- The r-squared is 0.02818 indicating that the score explains 2.8% of variation in the trait (same as what was reported in the paper)
+- Should check the F-statistic - not sure how they calculated it in the paper
+- The crp score explains the same amount of variation in log crp as reported by the pape also (~6%). The authors use log crp so I will continue to use log crp and measured vitamin D. 
+
+- I now have code which performs onesample mr (without covariates)
+- Need to update the data to include appropriate covariates (PCs etc)
+- And update the data to run the Townsend index analysis 
+- Before that, get the code for the nlmr script working 
+- The have a meeting to plan the data/strata/groups - or just draw it out
+
+Tomorrow: 
+
+- play with code to run nlmr 
+- Then plan all analyses (covariates etc)
+- organise and run all analyses (Monday??)
+
+
+
+#### Sample exclusions 
+- The publications had different criteria for their exclusions 
+- As I'm repeating the Zhou paper, will restrict to White British ancestry for now 
+- They used questionnaire and genetic data - I'm just going to use the British subset as defined by the IEU QC pipeline 
+- Basing the remaining standard exclusions on the recommendations in the IEU pipeline: excluding all standard exclusions (chromosome issues), excluding highly related individuals & keeping White British participants 
+- I've already applied the filter for those with withdrawn consent 
+- Filter highly and minimally related 
+- Info to refer to is [here](https://data.bris.ac.uk/datasets/1ovaau5sxunp2cv8rcy88688v/UK%20Biobank%20Genetic%20Data_MRC%20IEU%20Quality%20Control%20version%202.pdf) 
+
+
+#### Preliminary results from test script 
+
+- I can replicate the results from the paper using the residual method - evidence for a non-linear effect of Vitamin D on CRP. Effect of Vitamin D on CRP only in the strata with the lowest Vitamin D. 
+- No evidence for a non-linear effect using the Doubly-ranked method. 
+
+#### Test results 
+
+- 1SMR
+- method = `tsri`
+- repeat this using `ivreg` instead and also including the covariates on each side of the equation 
+
+|	analysis	|	beta	|	se	|	pval	|
+|	:----:	|	:----:	|	:----:	|	:----:	|
+|	osmr: vitd->crp (no covariates)	|	-0.000201298	|	0.000544045	|	0.711380988	|
+|	osmr: crp->vitd (no covariates)	|	-0.171012523	|	0.144634759	|	0.237056939	|
+|	osmr: vitd->crp	|	0.18402747	|	0.004526784	|	0	|
+|	osmr: crp->vitd	|	0.016858526	|	0.00023053	|	0	|
+
+
+
+
+
+
+
+- NLMR 
+- Vitamin D on CRP 
+- Residual & Doubly-ranked 
+- should make better plots for proper results 
+
+![alt text](vitd.crp.nlmr.residual-3.png)![alt text](vitd.crp.nlmr.doubly.ranked-3.png)
+ 
+
+
+
+
