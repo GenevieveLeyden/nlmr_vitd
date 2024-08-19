@@ -90,9 +90,17 @@ forestplot1 <- function (df, name = name, estimate = estimate, se = se, pvalue =
 
 ################# V1 plot ################
 #df <- fread('../univar.tdiq.season.zhou.vitd.txt', header =T)
+#df <- fread('../univar.tdiq.DEFICIENT.zhou.vitd.txt', header =T)
+
 #df <- fread('../univar.tdiq.season.focused.vitd.txt', header =T)
-df <- fread('../univar.tdiq.season.crp.txt', header =T)
-colnames(df) <- c('Exposure', 'beta', 'se', 'pvalue', 'fstat', 'name')
+#df <- fread('../univar.tdiq.DEFICIENT.focused.vitd.txt', header =T)
+
+#df <- fread('../univar.tdiq.season.crp.txt', header =T)
+df <- fread('../univar.tdiq.DEFICIENT.crp.txt', header =T)
+
+####df <- fread('../univar.mr.vitdDeficientQ4.txt')
+####df$name <- "Q4.vitD.deficient"
+colnames(df) <- c('Exposure', 'beta', 'se', 'pvalue', 'fstat', 'N', 'name')
 
 #### Order variables 
 # Define the levels in the desired order
@@ -105,7 +113,8 @@ df$name <- factor(df$name, levels = desired_levels)
 df <- df[order(df$name), ]
 
 df
-colours1 <- c('midnightblue')
+#colours1 <- c('midnightblue')
+colours1 <- c('mediumvioletred')
 
 
 
@@ -118,8 +127,8 @@ p1 <- forestplot1(
   pvalue = pvalue,
   size = beta,
   psignif = 0.05,
-  #title = "Univariable MR effects of Vitamin D on CRP",
-  title = "Univariable MR effects of CRP on Vitamin D",
+  title = "Univariable MR effects of Vitamin D on CRP - VitD deficient population",
+  #title = "Univariable MR effects of CRP on Vitamin D",
   #subtitle = "VitD GWAS score",
   #subtitle = "VitD focused score",
   subtitle = "CRP score",
@@ -154,9 +163,12 @@ p1
 
 
 ggsave(
-  #filename = "v1_season_zhou.png",    # File name
-  #filename = "v1_season_focused.png",    # File name
-  filename = "v1_season_crp.png",    # File name
+  #filename = "v1_season_zhou.png",    
+  #filename = "v1_season_focused.png", 
+  #filename = "v1_season_crp.png",   
+  #filename = "v3_season_deficient_zhou.png",    
+  #filename = "v3_season_deficient_focused.png", 
+  filename = "v3_season_deficient_crp.png",   
   plot = p1,                  # The ggplot object
   width = 6,                 # Width of the plot in inches
   height = 4,                # Height of the plot in inches
@@ -238,4 +250,80 @@ ggsave(
   units = "in",              
   
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########
+df1 <- df
+# Figure a
+p3 <- forestplot1(
+  df = df1,
+  estimate = beta,
+  colour = Exposure,
+  pvalue = pvalue,
+  size = beta,
+  psignif = 0.05,
+  title = "Univariable MR effects in VitD deficient (<25nmol/L) TDI-Q4 population",
+  #title = "Univariable MR effects of CRP on Vitamin D (season adjusted)",
+  #subtitle = "VitD GWAS score",
+  subtitle = "Results of bidirectional analysis",
+  #subtitle = "CRP score",
+  xlab = "change in outcome per 1-SD change in exposure (95% CI)",
+  #xlab = "change in Vitamin D per 1-SD change in log(CRP) (95% CI)",
+) +
+  # scale_size_manual(values = c(2,2,2)) +
+  ###scale_color_manual(values=colours2) +
+  
+  ### Code to rescale the plot if necessary ### 
+  #ggplot2::coord_cartesian( 
+  #xlim = c(0.5, 5.0) 
+  #) + 
+  #scale_x_continuous(breaks = c(0.5, 1.0, 2.0, 3.0, 5.0)) + 
+  guides(shape = guide_legend(override.aes = list(linetype = "blank"))) +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    text = element_text(colour = "black"), 
+    strip.background = element_blank(),
+    strip.text = element_text(colour = "black"),
+    panel.border = element_rect(fill = NA, colour = "grey20", size = rel(1)),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.text = element_text(colour = "black"),
+    axis.title = element_text(colour = "black"),
+    axis.ticks = element_line(size = 0.25, colour = "grey20"),
+    plot.title = element_text(hjust = 0.5, size=12)
+  )
+
+p3
+
+
+
+ggsave(
+  filename = "v3_univarMR_vitDdeficientQ4.png",   
+  plot = p3,                 
+  width = 6,                 # Width inches
+  height = 4,                # Height  inches
+  dpi = 300,                 # DPI (resolution) 
+  units = "in",              
+  
+)
+
 

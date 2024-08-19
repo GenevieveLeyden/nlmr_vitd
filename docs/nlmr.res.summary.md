@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 ---
  Non-linear MR: evaluating Vitamin D and CRP 
@@ -104,5 +104,16 @@ Summer = (April->September).
 #### Evidence of a significant effects: 
  - CRP on Vitamin D in Q1 (least deprived) during Winter  
 
+
+
+
+#### N (Sample) with Vitamin D deficiency (Vitamin D <25nmol/L)
+ 
+|	Townsend Deprivation Quartile 	|	Summer (N)	|	Winter (N)	|
+|	:----:	|	:----:	|	:----:	|
+|	Q1	|	2106	|	5033	|
+|	Q2	|	2235	|	5021	|
+|	Q3	|	2778	|	5788	|
+|	Q4	|	4374	|	8682	|
 
 

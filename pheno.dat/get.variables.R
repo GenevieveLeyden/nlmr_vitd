@@ -11,7 +11,7 @@ setwd('/projects/MRC-IEU/research/data/ukbiobank/phenotypic/applications/81499/r
 ## sex "31-0.0" -- got 
 ## Assessment center "54-0.0"  -- got 
 ## Month of attendance -- "55-0.0" -- got 
-## Place of birth is a atrange one and done by co-ordinates. Is this necessary of looking at Townsend I? 
+## Place of birth is a atrange one and done by co-ordinates. Is this necessary of looking at Townsend I? - also its uk or other 
 ## Townsend index at recruitment - "22189-0.0" -- got  ###### NOT FOUND #### NEED TO GET THIS FROM DNAnexus?? 
 ## Vitamin D -- "30890-0.0" -- got  
 ## CRP -- "30710-0.0" -- got ######### NOT FOUND 
@@ -45,9 +45,9 @@ dat1 <- merge(dat, linker, by = c("eid")) ## 488118
 
 colnames(dat1) <- c("eid", "sex", "age.at.attendance", "assessment.center", "month.of.attendance", "vitamin.D", "crp", "bmi", "IID")
 
-write.table(dat1, "/projects/MRC-IEU/research/projects/ieu2/p1/131/working/data/nlmr_vitd/phenotype.dat/raw.pheno.dat1.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+#write.table(dat1, "/projects/MRC-IEU/research/projects/ieu2/p1/131/working/data/nlmr_vitd/phenotype.dat/raw.pheno.dat1.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
-
+### Also extracting this phenotype data usind the RAP - to pick up variables missing in our release 
 
 
 
