@@ -1,5 +1,6 @@
 ### Assessing the non-linear relationship between vitD/CRP by univariable MR in UKB  
 ### split by Townsend Deprivation Quartile and by Season using ivreg 
+### Revisiting to run negative controls of VitD on age and sex in the TDI-quartiles 
 
 library(tidyverse)
 library(dplyr)
@@ -44,42 +45,44 @@ extract_estimate <- function(summary) {
 path <- getwd()
 ##filenames <- list.files(path = path) ## 
 ### V1 files 
-#f1 <- list.files(path = path, pattern = ".summer.txt")
-#f2 <- list.files(path = path, pattern = ".winter.txt")
-#filenames <- c(f1,f2)
+f1 <- list.files(path = path, pattern = ".summer.txt")
+f2 <- list.files(path = path, pattern = ".winter.txt")
+filenames <- c(f1,f2)
 
 
 
-#### V2 files 
-filenames <- list.files(path = path) 
-subset <- c("pheno.q1.txt", "pheno.q2.txt", "pheno.q3.txt","pheno.q4.txt")
-filenames <- filenames[which(filenames %in% subset)]
 
 
-### V1 
-#covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## makes no difference after checking
- #         "fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
-  #        "PC8", "PC9", "PC10")
+#### Negative control testing! 
+##covs <- c("age.at.assessment", "assessmenth.centre", "month.of.assessment", 
+#          "fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
+ #         "PC8", "PC9", "PC10")
+
+covs <- c("sex", "assessmenth.centre", "month.of.assessment", 
+          "fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
+          "PC8", "PC9", "PC10")
 
 
-### V2 - adjust for season instead
-covs <- c("sex", "age.at.assessment", "assessmenth.centre", "month.of.assessment", ## keep month?? ## 
-          "season","fasting.time", "chip", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", 
-         "PC8", "PC9", "PC10")
 
-############# UPDATE WHICH SCORE IS BEING USED ################### 
-##iv <- "vit.d.score" ##  
-iv <- "vit.d.focused"
+############# UPDATE WHICH SCORE IS BEING USED! ################### 
+iv <- "vit.d.score"  
+#iv <- "vit.d.focused"
 # iv <- "vit.d.focused.transformed"
  exp <- "vitamin.d"
 # 
- outcome <- "crp.log"
-# 
+#### outcome <- "crp.log" 
+ 
+ #### negative control testing 
+##outcome <- "sex"
+outcome <- "age.at.assessment"
+
 
 
 ###### Update for the opposite direction
 #iv <- "crp.score"
 #exp <- "crp.log"
+##outcome <- "sex"
+#outcome <- "age.at.assessment"
 
 #outcome <- "vitamin.d"
 
@@ -130,27 +133,21 @@ combined_results
 
 
 
+#### Negative control results 
+
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/negcntrl.sex.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/negcntrl.sex.tdiq.season.zhou.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/negcntrl.sex.tdiq.season.crp.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
 
-##### Save output 
-##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.zhou.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
-  
-##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/negcntrl.age.tdiq.season.focused.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
-##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.focused.transformed.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/negcntrl.age.tdiq.season.zhou.vitd.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
-#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.season.crp.txt", col.names = T, row.names = F, quote = F, sep = "\t")
+#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/negcntrl.age.tdiq.season.crp.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
-
-### need to repeat the last anlaysis using crp as didn't save the df 
-
-#### V2 results 
-
-#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.V2.crp.txt", col.names = T, row.names = F, quote = F, sep = "\t")
-
-##write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.V2.vitd.zhou.txt", col.names = T, row.names = F, quote = F, sep = "\t")
-
-#write.table(combined_results, "../../../../../../results/nlmr_vitd/univariable.mr.TDI/univar.tdiq.V2.vitd.focused.txt", col.names = T, row.names = F, quote = F, sep = "\t")
 
 
 
