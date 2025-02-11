@@ -181,22 +181,3 @@ Effect Estimates and P-values for Sickness Rank and Interaction Effects (**Sickn
 
 
 
-
-
-## Vitamin D and depression 
-
-#### Univariable MR by TDI Quartile and by Season 
-
-Investigating relationship between Vitamin D and probable depression in UKB by Townsend Deprivation Index (TDI) and by season. 
-
-Probable depression variable provided in data-field `20126`; excluded those with probable bipolar. Phenotype derived in [Smith et al 2013](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0075362). 
-
-
-![](plots/univar_focused_vitd_depression.png)
-
-- No significant effects observed using the focused vitamin D score. 
-
-![](plots/univar_zhou_vitd_depression.png)
-
-- Significant effect observed using the Vitamin D GWAS score between vit D and probable depression in Summer TD-I Q4 (most deprived)? 
-
